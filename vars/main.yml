@@ -1,0 +1,7 @@
+---
+install_files:
+  - owner:            'root'
+    group:            'root'
+    mode:             '0755'
+    src:              "{{ role_path }}/files/bin/update_kanboard"
+    dest:             '/usr/local/bin/update_kanboard'

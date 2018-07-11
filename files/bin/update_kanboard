@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# DISTRIBUTED BY ANSIBLE
+
+# Run me as root.
+
+old_kb=kanboard.$(stamp)
+
+cd /root
+wget 'http://kanboard.net/kanboard-latest.zip'
+
+cd /var/www/
+mv kanboard $old_kb
+unzip /root/kanboard-latest.zip
+rm -rf ./kanboard/data
+mv $old_kb/data ./kanboard/
+rm -rf $old_kb
