@@ -1,17 +1,37 @@
 #!/bin/bash
-
-# DISTRIBUTED BY ANSIBLE
-
+#
 # Run me as root.
 
-old_kb=kanboard.$(stamp)
+kanboard_git_url='https://github.com/kanboard/kanboard.git'
+# The web root could be templated here, based on host configuration, observed
+# or preferably from inventory.
+web_root='/var/www/html'
+httpd_user='www-data' 
 
-cd /root
-wget 'http://kanboard.net/kanboard-latest.zip'
 
-cd /var/www/
-mv kanboard $old_kb
-unzip /root/kanboard-latest.zip
-rm -rf ./kanboard/data
-mv $old_kb/data ./kanboard/
-rm -rf $old_kb
+main() {
+  cd "${web_root}"
+
+  if ! test -d kanboard; then
+    git clone $kanboard_git_url \
+      || fail "Failed to clone git repo."
+  fi
+
+  cd kanboard \
+    || fail "Failed to traverse:  ${web_root}/kanboard"
+
+  git pull \
+    || fail "Failed to update repo."
+
+  chown "${httpd_user}" data \
+    || fail "Failed to set ownership of data directory."
+}
+
+
+fail() {
+  printf "%s\n" "${1}" 2>&1
+  exit "${2:-1}"
+}
+
+
+main

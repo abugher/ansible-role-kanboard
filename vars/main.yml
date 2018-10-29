@@ -1,7 +1,22 @@
 ---
+install_packages:
+  - 'git'
+  - 'sqlite3'
+  - 'libapache2-mod-php'
+  - 'php-pdo-sqlite'
+  - 'php-gd'
+  - 'php-mbstring'
+  - 'php-dom'
+restart_services:
+  - 'apache2'
 install_files:
   - owner:            'root'
     group:            'root'
     mode:             '0755'
     src:              "{{ role_path }}/files/bin/update_kanboard"
     dest:             '/usr/local/bin/update_kanboard'
+shell_commands:
+  - command:            '/usr/local/bin/update_kanboard'
+    user:               'root'
+    chdir:              '/'
+    creates:            '/var/www/kanboard'
