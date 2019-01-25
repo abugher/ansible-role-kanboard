@@ -5,5 +5,3 @@
 - include:              '../tasks/install_files.yml'
 #- include:              '../tasks/shell_commands.yml'
 - include:              '../tasks/git_repos.yml'
-  # install == changed; update == unchanged
-  changed_when:         "'null' == git_repos_result.before"
