@@ -3,10 +3,10 @@ install_packages:
   - 'git'
   - 'sqlite3'
   - 'libapache2-mod-php'
-  - 'php-pdo-sqlite'
+  - 'php-sqlite3'
   - 'php-gd'
   - 'php-mbstring'
-  - 'php-dom'
+  - 'php-xml'
 restart_services:
   - 'apache2'
 install_files:
