@@ -1,7 +1,31 @@
 ---
 - include:              '../tasks/install_packages.yml'
+
+#- include:              '../tasks/scripts.yml'
+#- script:               "{{ item.script }}"
+#  args:
+#    creates:            "{{ item.creates }}"
+#  with_items:           "{{ scripts }}"
+#  register:             scripts_result
+#  changed_when:         false
+#- debug:                
+#    msg:                "Checking changed status."
+#  changed_when:         "{{ item.stdout }}".find("CHANGED") != -1
+#  with_items:           scripts_result
+#  register:             scripts_followup_result
+
+- script:               'scripts/enable_php.sh'
+  register:             enable_php_result
+  changed_when:         false
+
+- debug:
+    msg:                'Checking changed status.'
+  changed_when:         enable_php_result.stdout.find("CHANGED")
+  register:             enable_php_followup_result
+
 - include:              '../tasks/restart_services.yml'
   when:                 install_packages_result.changed
+                        or enable_php_followup_result.changed
 - include:              '../tasks/install_files.yml'
-#- include:              '../tasks/shell_commands.yml'
+- include:              '../tasks/shell_commands.yml'
 - include:              '../tasks/git_repos.yml'

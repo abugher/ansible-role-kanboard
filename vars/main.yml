@@ -7,6 +7,9 @@ install_packages:
   - 'php-gd'
   - 'php-mbstring'
   - 'php-xml'
+#scripts:
+#  - script:             'scripts/enable_php.sh'
+#    creates:            '/creates/nothing/always/run'
 restart_services:
   - 'apache2'
 install_files:
@@ -15,11 +18,11 @@ install_files:
     mode:             '0755'
     src:              "{{ role_path }}/files/bin/update_kanboard"
     dest:             '/usr/local/bin/update_kanboard'
-#shell_commands:
-#  - command:            '/usr/local/bin/update_kanboard'
-#    user:               'root'
-#    chdir:              '/'
-#    creates:            '/var/www/kanboard'
+shell_commands:
+  - command:            '/usr/local/bin/update_kanboard'
+    user:               'root'
+    chdir:              '/'
+    creates:            '/var/www/kanboard'
 git_repos:
   - repo:               'https://github.com/kanboard/kanboard.git'
     dest:               '/var/www/html/kanboard'
