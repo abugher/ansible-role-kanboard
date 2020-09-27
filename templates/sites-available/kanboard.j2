@@ -1,0 +1,4 @@
+server {
+  server_name           kanboard kanboard.{{ domain }};
+  return 301            https://kanboard.{{ domain }}$request_uri;
+}

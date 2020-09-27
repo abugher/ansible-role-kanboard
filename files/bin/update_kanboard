@@ -5,12 +5,13 @@
 kanboard_git_url='https://github.com/kanboard/kanboard.git'
 # The web root could be templated here, based on host configuration, observed
 # or preferably from inventory.
-web_root='/var/www/html'
+parent_dir='/usr/local/share'
 httpd_user='www-data' 
 
 
 main() {
-  cd "${web_root}"
+  cd "${parent_dir}" \
+    || fail "Failed to traverse:  ${parent_dir}"
 
   if ! test -d kanboard; then
     git clone $kanboard_git_url \
@@ -18,7 +19,7 @@ main() {
   fi
 
   cd kanboard \
-    || fail "Failed to traverse:  ${web_root}/kanboard"
+    || fail "Failed to traverse:  ${parent_dir}/kanboard"
 
   git pull \
     || fail "Failed to update repo."

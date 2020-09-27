@@ -1,0 +1,25 @@
+upstream php {
+  server unix:/run/php/php7.3-fpm.sock;
+}
+
+#upstream fcgiwrap {
+#  server unix:/run/fcgiwrap.socket;
+#}
+
+server {
+  listen                443 ssl;
+  ssl_certificate       /etc/ssl/certs/{{ inventory_hostname }}.pem;
+  ssl_certificate_key   /etc/ssl/private/{{ inventory_hostname }}.pem;
+  server_name           kanboard kanboard.{{ domain }};
+
+  root                  /usr/local/share/kanboard/;
+  index                 index.php index.html;
+
+  location ~ \.php$ {
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass php;
+    # See:  http://stackoverflow.com/a/15424808
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+  }
+}

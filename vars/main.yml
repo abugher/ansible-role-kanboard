@@ -2,27 +2,44 @@
 install_packages:
   - 'git'
   - 'sqlite3'
-  - 'libapache2-mod-php'
   - 'php-sqlite3'
   - 'php-gd'
   - 'php-mbstring'
   - 'php-xml'
-#scripts:
-#  - script:             'scripts/enable_php.sh'
-#    creates:            '/creates/nothing/always/run'
+  - 'php-fpm'
+start_services:
+  - 'nginx'
+  - 'php7.3-fpm'
 restart_services:
-  - 'apache2'
+  - 'nginx'
 install_files:
   - owner:            'root'
     group:            'root'
     mode:             '0755'
-    src:              "{{ role_path }}/files/bin/update_kanboard"
+    src:              'files/bin/update_kanboard'
     dest:             '/usr/local/bin/update_kanboard'
+template_files:
+  - owner:            'root'
+    group:            'root'
+    mode:             '0644'
+    src:              'templates/sites-available/kanboard.j2'
+    dest:             '/etc/nginx/sites-available/kanboard'
+  - owner:            'root'
+    group:            'root'
+    mode:             '0644'
+    src:              'templates/sites-available/kanboard.ssl.j2'
+    dest:             '/etc/nginx/sites-available/kanboard.ssl'
+symlinks:
+  - owner:              'root'
+    group:              'root'
+    src:                '/etc/nginx/sites-available/kanboard'
+    dest:               '/etc/nginx/sites-enabled/kanboard'
+  - owner:              'root'
+    group:              'root'
+    src:                '/etc/nginx/sites-available/kanboard.ssl'
+    dest:               '/etc/nginx/sites-enabled/kanboard.ssl'
 shell_commands:
   - command:            '/usr/local/bin/update_kanboard'
     user:               'root'
     chdir:              '/'
-    creates:            '/var/www/kanboard'
-git_repos:
-  - repo:               'https://github.com/kanboard/kanboard.git'
-    dest:               '/var/www/html/kanboard'
+    creates:            '/usr/local/share/kanboard'
