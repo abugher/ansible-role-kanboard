@@ -1,4 +1,8 @@
 ---
+# This might not work with more than one server, but avoids the need to set a
+# "kanboard_server" variable in addition to group membership.
+- include_vars:         '../../../sensitive_ansible/inventory/host_vars/{{ item }}.yml'
+  with_items:           "{{ groups['kanboard'] }}"
 - include:              '../tasks/install_packages.yml'
 - include:              '../tasks/start_services.yml'
   when:                 install_packages_result.changed
@@ -9,3 +13,26 @@
                         or symlinks_result.changed
 - include:              '../tasks/install_files.yml'
 - include:              '../tasks/shell_commands.yml'
+# Initialize the database.
+- shell:                wget -O /dev/null https://kanboard.{{ domain }}
+  connection:           'local'
+  become:               false
+  changed_when:         false
+- include:              '../tasks/adjust_files.yml'
+# Race the devil.
+- shell:                if sqlite3 db.sqlite "SELECT * FROM users WHERE username='admin';" | grep -q .; then sqlite3 db.sqlite "DELETE FROM users WHERE username='admin';" && echo 'CHANGED'; else true; fi
+  args:
+    chdir:              '/usr/local/share/kanboard/data'
+  become:               true
+  become_method:        'sudo'
+  become_user:          'www-data'
+  register:             delete_admin_result
+  changed_when:         delete_admin_result.stdout.find('CHANGED') != -1
+- shell:                if ! sqlite3 db.sqlite "SELECT * FROM users WHERE username='aaron';" | grep -q .; then sqlite3 db.sqlite "INSERT INTO users VALUES(1,'aaron','{{ kanboard_hash_aaron }}',1,0,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,'',4,0,0,0,NULL,'app-admin',1,NULL,NULL,NULL);" && echo 'CHANGED'; else true; fi
+  args:
+    chdir:              '/usr/local/share/kanboard/data'
+  become:               true
+  become_method:        'sudo'
+  become_user:          'www-data'
+  register:             create_aaron_result
+  changed_when:         create_aaron_result.stdout.find('CHANGED') != -1

@@ -10,25 +10,25 @@ install_packages:
 start_services:
   - 'nginx'
   - 'php7.3-fpm'
+template_files:
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'templates/sites-available/kanboard.j2'
+    dest:               '/etc/nginx/sites-available/kanboard'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0644'
+    src:                'templates/sites-available/kanboard.ssl.j2'
+    dest:               '/etc/nginx/sites-available/kanboard.ssl'
 restart_services:
   - 'nginx'
 install_files:
-  - owner:            'root'
-    group:            'root'
-    mode:             '0755'
-    src:              'files/bin/update_kanboard'
-    dest:             '/usr/local/bin/update_kanboard'
-template_files:
-  - owner:            'root'
-    group:            'root'
-    mode:             '0644'
-    src:              'templates/sites-available/kanboard.j2'
-    dest:             '/etc/nginx/sites-available/kanboard'
-  - owner:            'root'
-    group:            'root'
-    mode:             '0644'
-    src:              'templates/sites-available/kanboard.ssl.j2'
-    dest:             '/etc/nginx/sites-available/kanboard.ssl'
+  - owner:              'root'
+    group:              'root'
+    mode:               '0755'
+    src:                'files/bin/update_kanboard'
+    dest:               '/usr/local/bin/update_kanboard'
 symlinks:
   - owner:              'root'
     group:              'root'
@@ -39,7 +39,12 @@ symlinks:
     src:                '/etc/nginx/sites-available/kanboard.ssl'
     dest:               '/etc/nginx/sites-enabled/kanboard.ssl'
 shell_commands:
-  - command:            '/usr/local/bin/update_kanboard'
+  - command:            /usr/local/bin/update_kanboard
     user:               'root'
     chdir:              '/'
     creates:            '/usr/local/share/kanboard'
+adjust_files:
+  - owner:              'www-data'
+    group:              'root'
+    mode:               '0600'
+    path:               '/usr/local/share/kanboard/data/db.sqlite'
