@@ -28,7 +28,7 @@
   become_user:          'www-data'
   register:             delete_admin_result
   changed_when:         delete_admin_result.stdout.find('CHANGED') != -1
-- shell:                if ! sqlite3 db.sqlite "SELECT * FROM users WHERE username='aaron';" | grep -q .; then sqlite3 db.sqlite "INSERT INTO users VALUES(1,'aaron','{{ kanboard_hash_aaron }}',1,0,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,'',4,0,0,0,NULL,'app-admin',1,NULL,NULL,NULL);" && echo 'CHANGED'; else true; fi
+- shell:                if ! sqlite3 db.sqlite "SELECT * FROM users WHERE username='aaron';" | grep -q .; then sqlite3 db.sqlite 'INSERT INTO users VALUES(1,"aaron","{{ kanboard_hash_aaron }}",1,0,NULL,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,"",4,0,0,0,NULL,"app-admin",1,NULL,NULL,NULL);' && echo 'CHANGED'; else true; fi
   args:
     chdir:              '/usr/local/share/kanboard/data'
   become:               true
