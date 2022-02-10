@@ -9,7 +9,7 @@ install_packages:
   - 'php-fpm'
 start_services:
   - 'nginx'
-  - 'php7.3-fpm'
+  - 'php7.4-fpm'
 template_files:
   - owner:              'root'
     group:              'root'
