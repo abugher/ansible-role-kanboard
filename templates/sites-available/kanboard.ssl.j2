@@ -8,7 +8,7 @@ upstream php {
 
 server {
   listen                443 ssl;
-  ssl_certificate       /etc/ssl/certs/{{ inventory_hostname }}.pem;
+  ssl_certificate       /etc/ssl/certs/chain.pem;
   ssl_certificate_key   /etc/ssl/private/{{ inventory_hostname }}.pem;
   server_name           kanboard kanboard.{{ domain }};
 
