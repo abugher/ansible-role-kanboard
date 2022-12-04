@@ -3,6 +3,8 @@
 # Run me as root.
 
 kanboard_git_url='https://github.com/kanboard/kanboard.git'
+kanboard_dark_mode_switcher_url='https://github.com/Jeroen-45/kanboard-dark-mode-switcher.git'
+greenwing_url='https://github.com/p0lym0rphik/Greenwing.git'
 # The web root could be templated here, based on host configuration, observed
 # or preferably from inventory.
 parent_dir='/usr/local/share'
@@ -15,17 +17,45 @@ main() {
 
   if ! test -d kanboard; then
     git clone $kanboard_git_url \
-      || fail "Failed to clone git repo."
+      || fail "Failed to clone kanboard git repo."
   fi
 
   cd kanboard \
     || fail "Failed to traverse:  ${parent_dir}/kanboard"
 
   git pull \
-    || fail "Failed to update repo."
+    || fail "Failed to update kanboard repo."
 
   chown "${httpd_user}" data \
     || fail "Failed to set ownership of data directory."
+
+  cd plugins \
+    || fail "Failed to travers:  plugins"
+
+  if ! test -d DarkModeSwitcher; then
+    git clone $kanboard_dark_mode_switcher_url DarkModeSwitcher \
+      || fail "Failed to clone kanboard dark mode switcher git repo."
+  fi
+
+  cd DarkModeSwitcher \
+    || fail "Failed to traverse:  DarkModeSwitcher"
+
+  git pull \
+    || fail "Failed to update kanboard dark mode switcher repo."
+
+  cd .. \
+    || fail "Failed to traverse:  dots"
+
+  if ! test -d Greenwing; then
+    git clone $greenwing_url \
+      || fail "Failed to clone greenwing git repo."
+  fi
+
+  cd Greenwing \
+    || fail "Failed to traverse:  Greenwing"
+
+  git pull \
+    || fail "Failed to update greenwing repo."
 }
 
 
