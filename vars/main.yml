@@ -48,3 +48,4 @@ adjust_files:
     group:              'root'
     mode:               '0600'
     path:               '/usr/local/share/kanboard/data/db.sqlite'
+  - 'nginx'
