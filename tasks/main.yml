@@ -1,7 +1,7 @@
 ---
 # This might not work with more than one server, but avoids the need to set a
 # "kanboard_server" variable in addition to group membership.
-- include_vars:         '../../../sensitive_ansible/inventory/host_vars/{{ item }}.yml'
+- include_vars:         '../../../sensitive-ansible/inventory/host_vars/{{ item }}.yml'
   with_items:           "{{ groups['kanboard'] }}"
 - include:              '../tasks/install_packages.yml'
 - include:              '../tasks/start_services.yml'
