@@ -44,7 +44,7 @@ shell_commands:
   - command:            /usr/local/bin/update_kanboard
     user:               'root'
     chdir:              '/'
-    creates:            '/usr/local/share/kanboard/plugins/kanboard-dark-mode-switcher'
+    creates:            '/usr/local/share/kanboard/plugins/DarkModeSwitcher'
 adjust_files:
   - owner:              'www-data'
     group:              'root'
