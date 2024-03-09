@@ -3,22 +3,22 @@
 # "kanboard_server" variable in addition to group membership.
 - include_vars:         '../../../sensitive-ansible/inventory/host_vars/{{ item }}.yml'
   with_items:           "{{ groups['kanboard'] }}"
-- include:              '../tasks/install_packages.yml'
-- include:              '../tasks/start_services.yml'
+- include_tasks:        '../tasks/install_packages.yml'
+- include_tasks:        '../tasks/start_services.yml'
   when:                 install_packages_result.changed
-- include:              '../tasks/template_files.yml'
-- include:              '../tasks/symlinks.yml'
-- include:              '../tasks/restart_services.yml'
+- include_tasks:        '../tasks/template_files.yml'
+- include_tasks:        '../tasks/symlinks.yml'
+- include_tasks:        '../tasks/restart_services.yml'
   when:                 template_files_result.changed
                         or symlinks_result.changed
-- include:              '../tasks/install_files.yml'
-- include:              '../tasks/shell_commands.yml'
+- include_tasks:        '../tasks/install_files.yml'
+- include_tasks:        '../tasks/shell_commands.yml'
 # Initialize the database.
 - shell:                wget -O /dev/null https://kanboard.{{ domain }}
   connection:           'local'
   become:               false
   changed_when:         false
-- include:              '../tasks/adjust_files.yml'
+- include_tasks:        '../tasks/adjust_files.yml'
 # Race the devil.
 - shell:                if sqlite3 db.sqlite "SELECT * FROM users WHERE username='admin';" | grep -q .; then sqlite3 db.sqlite "DELETE FROM users WHERE username='admin';" && echo 'CHANGED'; else true; fi
   args:
