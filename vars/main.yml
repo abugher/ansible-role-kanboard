@@ -1,7 +1,5 @@
 ---
 php_fpm:                'php8.2-fpm'
-dependencies:
-  - 'nginx'
 install_packages:
   - 'git'
   - 'sqlite3'
