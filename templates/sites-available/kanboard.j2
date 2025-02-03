@@ -1,4 +1,4 @@
 server {
-  server_name           kanboard kanboard.{{ domain }};
+  server_name           kanboard kanboard.{{ domain }}{% for domain_alias in domain_aliases %} kanboard.{{ domain_alias }}{% endfor %};
   return 301            https://kanboard.{{ domain }}$request_uri;
 }

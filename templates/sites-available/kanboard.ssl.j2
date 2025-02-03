@@ -10,7 +10,7 @@ server {
   listen                443 ssl;
   ssl_certificate       /etc/ssl/certs/chain.pem;
   ssl_certificate_key   /etc/ssl/private/{{ inventory_hostname }}.pem;
-  server_name           kanboard kanboard.{{ domain }};
+  server_name           kanboard kanboard.{{ domain }}{% for domain_alias in domain_aliases %} kanboard.{{ domain_alias }}{% endfor %};
 
   root                  /usr/local/share/kanboard/;
   index                 index.php index.html;
