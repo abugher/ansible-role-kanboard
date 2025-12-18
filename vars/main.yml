@@ -1,5 +1,5 @@
 ---
-php_fpm:                'php8.2-fpm'
+php_fpm:                'php8.4-fpm'
 install_packages:
   - 'git'
   - 'sqlite3'
