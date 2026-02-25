@@ -1,5 +1,5 @@
 ---
-- include_vars:         "sensitive-inventory/host_vars/{{ groups['kanboard'][0] }}.yml"
+- include_vars:         "{{ sensitive_inventory_path }}/host_vars/{{ groups['kanboard'][0] }}.yml"
 - include_tasks:        'tasks/common/install_packages.yml'
 - include_tasks:        'tasks/common/start_services.yml'
   when:                 install_packages_result.changed
